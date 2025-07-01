@@ -200,7 +200,6 @@
   });
   // ✅ 書き込み関数
  window.updateFirebaseStatus = function(name, isOnline) {
-   logEntry(name, isOnline ? "入室" : "退室");
     const statusRef = ref(database, 'seats/' + name);
     set(statusRef, isOnline ? "online" : "offline");
   }
