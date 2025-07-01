@@ -144,6 +144,9 @@
 
     function updateStatus(isOnline) {
       if (currentSeat && currentSeat.dataset.hori !== "true") {
+        const name = currentSeat.dataset.name;
+        updateFirebaseStatus(name, isOnline);
+
         if (isOnline) {
           currentSeat.classList.add('online');
         } else {
@@ -157,5 +160,52 @@
       document.getElementById('popupOverlay').style.display = 'none';
     }
   </script>
+  <!-- ここから Firebaseのコード -->
+<script type="module">
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+  import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+  const firebaseConfig = {
+    apiKey: "AIzaSyAokDXuZsin37pdrIn-rJCPNhhUxOwlzM",
+    authDomain: "topia-online-study.firebaseapp.com",
+    databaseURL: "https://topia-online-study-default-rtdb.firebaseio.com",
+    projectId: "topia-online-study",
+    storageBucket: "topia-online-study.appspot.com",
+    messagingSenderId: "646481189423",
+    appId: "1:646481189423:web:6623b8828652490236c4da",
+    measurementId: "G-ZRCJN56SNM"
+  };
+
+  const app = initializeApp(firebaseConfig);
+  const database = getDatabase(app);
+import { onValue } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+const statusRef = ref(database, 'seats');
+onValue(statusRef, (snapshot) => {
+  const data = snapshot.val();
+  if (!data) return;
+
+  // すべての席を一度リセット
+  document.querySelectorAll('.seat').forEach(seat => {
+    seat.classList.remove('online');
+  });
+
+  // onlineの人だけハイライト
+  Object.entries(data).forEach(([name, status]) => {
+    if (status === "online") {
+      const seat = document.querySelector(`.seat[data-name="${name}"]`);
+      if (seat) seat.classList.add('online');
+    }
+  });
+});
+
+  // 例：席の状態をFirebaseに保存
+  function updateFirebaseStatus(name, isOnline) {
+    const statusRef = ref(database, 'seats/' + name);
+    set(statusRef, isOnline ? "online" : "offline");
+  }
+</script>
+<!-- ここまで Firebaseのコード -->
+
 </body>
 </html>
