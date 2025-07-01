@@ -200,7 +200,7 @@
   });
 
   // ✅ 書き込み関数
-  function updateFirebaseStatus(name, isOnline) {
+ window.updateFirebaseStatus = function(name, isOnline) {
     const statusRef = ref(database, 'seats/' + name);
     set(statusRef, isOnline ? "online" : "offline");
   }
