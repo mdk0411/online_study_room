@@ -122,21 +122,28 @@
     ];
 
     document.querySelectorAll('.seat').forEach(seat => {
-      seat.addEventListener('click', () => {
-        currentSeat = seat;
-        const popup = document.getElementById('popupOverlay');
-        const popupName = document.getElementById('popupName');
-        const popupButtons = document.getElementById('popupButtons');
+  seat.addEventListener('click', () => {
+    currentSeat = seat;
+    const popup = document.getElementById('popupOverlay');
+    const popupName = document.getElementById('popupName');
+    const popupButtons = document.getElementById('popupButtons');
 
-        if (seat.dataset.hori === "true") {
-          const randomMsg = messages[Math.floor(Math.random() * messages.length)];
-          popupName.innerText = "堀「" + randomMsg + "」";
-          popupButtons.style.display = "none";
-        } else {
-          popupName.innerText = seat.dataset.name + " さんが選択されています";
-          popupButtons.style.display = "block";
-        }
+    if (seat.dataset.hori === "true") {
+      let messageText = "";
+      if (!horiHasSpoken) {
+        messageText = "がんばってください。"; // ← 最初の一言を固定
+        horiHasSpoken = true;
+      } else {
+        const randomMsg = messages[Math.floor(Math.random() * messages.length)];
+        messageText = randomMsg;
+      }
 
+      popupName.innerText = "堀「" + messageText + "」";
+      popupButtons.style.display = "none";
+    } else {
+      popupName.innerText = seat.dataset.name + " さんが選択されています";
+      popupButtons.style.display = "block";
+    }
         popup.style.display = 'flex';
       });
     });
