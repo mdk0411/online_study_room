@@ -71,7 +71,8 @@
 </head>
 <body>
   <h1>オンライン自習室</h1>
-  /* <div id="clock" style="
+  <!--  
+  <div id="clock" style="
   position: fixed;
   top: 10px;
   right: 20px;
@@ -86,7 +87,8 @@
   z-index: 999;
 ">
   🕒 --
-</div>*/
+</div>
+--> 
 
   <p>自分の席をクリックして「入室 / 退室」</p>
   <div class="classroom" id="classroom">
@@ -224,8 +226,11 @@
 </script>
 
 <!-- ここまで Firebaseのコード -->
-<script>
-  /* function updateClock() {
+
+<!-- ここから時計のコード --> 
+<!--
+  <script>
+  function updateClock() {
     const now = new Date();
     const hh = String(now.getHours()).padStart(2, '0');
     const mm = String(now.getMinutes()).padStart(2, '0');
@@ -235,7 +240,8 @@
 
   setInterval(updateClock, 1000);
   updateClock();
-</script> */
+</script> 
+-->
 
 </body>
 </html>
