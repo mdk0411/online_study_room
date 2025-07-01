@@ -199,89 +199,12 @@
       }
     });
   });
-window.addEventListener("DOMContentLoaded", () => {
-  //const logsRef = query(ref(database, 'logs'), limitToLast(10));
-  onValue(logsRef, (snapshot) => {
-    const logs = [];
-    snapshot.forEach(child => {
-      logs.push(child.val());
-    });
-    logs.reverse();
-
-    const logList = document.getElementById('logList');
-    if (!logList) return; // 安全ガード
-
-    logList.innerHTML = '';
-    logs.forEach(log => {
-      const date = new Date(log.timestamp);
-      const timeStr = date.toLocaleString("ja-JP", {
-        year: 'numeric', month: '2-digit', day: '2-digit',
-        hour: '2-digit', minute: '2-digit'
-      });
-      const li = document.createElement('li');
-      li.textContent = `🕒 ${timeStr}　${log.name}さんが${log.status}しました`;
-      logList.appendChild(li);
-    });
-  });
-});
-
   // ✅ 書き込み関数
  window.updateFirebaseStatus = function(name, isOnline) {
    logEntry(name, isOnline ? "入室" : "退室");
     const statusRef = ref(database, 'seats/' + name);
     set(statusRef, isOnline ? "online" : "offline");
   }
-  // ✅ ログ
-  function logEntry(name, status) {
-  const timestamp = new Date().toISOString();
-  const logRef = ref(database, 'logs');
-  const newLogRef = push(logRef);
-  set(newLogRef, {
-    name: name,
-    status: status,
-    timestamp: timestamp
-  });
-}
-  const logsRef = query(ref(database, 'logs'), limitToLast(10));
-onValue(logsRef, (snapshot) => {
-  const logs = [];
-  snapshot.forEach(child => {
-    logs.push(child.val());
-  });
-  logs.reverse(); // 最新順に並び替え
-
-  const logList = document.getElementById('logList');
-  logList.innerHTML = '';
-
-  logs.forEach(log => {
-    const date = new Date(log.timestamp);
-    const timeStr = date.toLocaleString("ja-JP", {
-      year: 'numeric', month: '2-digit', day: '2-digit',
-      hour: '2-digit', minute: '2-digit'
-    });
-    const li = document.createElement('li');
-    li.textContent = `🕒 ${timeStr}　${log.name}さんが${log.status}しました`;
-    logList.appendChild(li);
-  });
-});
-<!-- ログ表示エリア -->
-<div id="logArea" style="
-  margin-top: 40px;
-  padding: 15px;
-  background-color: #fff2e6;
-  border: 1px solid #ccc;
-  border-radius: 10px;
-  width: 90%;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-  font-size: 0.95em;
-  line-height: 1.6;
-  color: #333;
-">
-  <strong>📜 入退室ログ（最新10件）</strong>
-  <ul id="logList" style="list-style: none; padding-left: 0;"></ul>
 </div>
 </script>
 
